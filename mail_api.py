@@ -8,7 +8,8 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from socketserver import ThreadingMixIn
 
 BASE_URL = os.environ.get("STALWART_BASE_URL", "https://example.com").rstrip("/")
 ADMIN_EMAIL = os.environ.get("STALWART_ADMIN_EMAIL", "")
@@ -557,6 +558,10 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json(exc.status, {"success": False, "error": exc.message, "detail": exc.detail})
         except Exception as exc:
             self.send_json(500, {"success": False, "error": "Internal server error", "detail": str(exc)})
+
+
+class ThreadingHTTPServer(ThreadingMixIn, HTTPServer):
+    daemon_threads = True
 
 
 if __name__ == "__main__":
