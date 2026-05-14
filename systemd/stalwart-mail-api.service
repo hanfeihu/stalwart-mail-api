@@ -1,0 +1,15 @@
+[Unit]
+Description=Stalwart Mail API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/stalwart-mail-api
+EnvironmentFile=/opt/stalwart-mail-api/.env
+ExecStart=/usr/bin/env python3 /opt/stalwart-mail-api/mail_api.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
